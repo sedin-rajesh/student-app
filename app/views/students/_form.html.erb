@@ -1,0 +1,40 @@
+<div class="form">
+    <h2>Add Student</h2>
+    <div class="form-content">
+        <%= form_with model: @student do |form|%>
+            <% if form.object.errors.any? %>
+                <h2 class="error"><%= form.object.errors.full_messages.first %></h2>
+            <% end %>
+
+            <div>
+                <%=form.label :name%>
+                <%= form.text_field :name%>
+            </div>
+            <div>
+                <%=form.label :email%>
+                <%= form.text_field :email%>
+            </div>
+            <div>
+                <%=form.label :age%>
+                <%= form.number_field :age%>
+            </div>
+            <div>
+                <%= form.label :course %>
+                <%= form.select :course,
+                    ["Ruby", "Rails", "React", "Java"],
+                    prompt: "Select a Course" %>
+            </div>
+            <div>
+                <%=form.label :city%>
+                <%= form.text_field :city%>
+            </div>
+            <div>
+                <%= form.label :marks %>
+                <%= form.number_field :marks %>
+            </div>
+            <div>
+                <%=form.submit%>
+            </div>
+        <% end %>
+    </div>
+</div>
