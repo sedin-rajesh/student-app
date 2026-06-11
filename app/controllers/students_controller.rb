@@ -1,13 +1,12 @@
 class StudentsController < ApplicationController
-  
   def index
     @students = Student.all
 
     if params[:search].present?
+      search = "%#{params[:search]}%"
       @students = @students.where(
         "name LIKE ? OR email LIKE ?",
-        "%#{params[:search]}%",
-        "%#{params[:search]}%"
+         search: search
       )
     end
 
@@ -16,7 +15,7 @@ class StudentsController < ApplicationController
     end
   end
 
-  def new 
+  def new
     @student=Student.new
   end
 
@@ -37,7 +36,7 @@ class StudentsController < ApplicationController
     if @student.save
       redirect_to @student
     else
-      render :new,status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -50,7 +49,7 @@ class StudentsController < ApplicationController
     if @student.update(student_params)
       redirect_to students_path
     else
-      render :edit,status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -60,8 +59,8 @@ class StudentsController < ApplicationController
     redirect_to students_path
   end
 
-  private 
+  private
     def student_params
-      params.expect(student: [:name,:email,:age,:course,:city,:marks])
+      params.expect(student: [ :name, :email, :age, :course, :city, :marks ])
     end
 end
