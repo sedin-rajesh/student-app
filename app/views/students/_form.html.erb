@@ -21,8 +21,8 @@
             <div>
                 <%= form.label :course %>
                 <%= form.select :course,
-                    ["Ruby", "Rails", "React", "Java"],
-                    prompt: "Select a Course" %>
+                    Student::COURSES,
+                    prompt: "All Courses" %>
             </div>
             <div>
                 <%=form.label :city%>

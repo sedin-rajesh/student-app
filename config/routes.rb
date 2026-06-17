@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  get "teachers/index"
   devise_for :users
-  root "students#dashboard"
+  root "dashboard#dashboard"
+  get "dashboard", to: "dashboard#dashboard"
   resources :students
-  resources :teachers, only: [:index]
+  resources :teachers, only: [ :index ]
 end

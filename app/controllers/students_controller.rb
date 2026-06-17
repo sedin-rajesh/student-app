@@ -9,7 +9,7 @@ class StudentsController < ApplicationController
     if params[:search].present?
       search = "%#{params[:search]}%"
       @students = @students.where(
-        "name LIKE ? OR email LIKE ?",
+        "name LIKE :search OR email LIKE :search",
          search: search
       )
     end
@@ -24,48 +24,24 @@ class StudentsController < ApplicationController
   end
 
   def show
-    @student=Student.find(params[:id])
-  end
-
-  def dashboard
-    if current_user.admin?
-      @total_students = Student.count
-      @total_teachers = User.teacher.count
-
-      @students_per_teacher =
-        User.teacher
-            .left_joins(:students)
-            .group(:email)
-            .count
-    else
-      students = current_user.students
-
-      @total_students = students.count
-      @ruby_students = students.where(course: "Ruby").count
-      @rails_students = students.where(course: "Rails").count
-      @react_students = students.where(course: "React").count
-      @java_students = students.where(course: "Java").count
-    end
   end
 
   def create
-    @student=Student.build(student_params)
+    @student=Student.new(student_params)
     if current_user.teacher?
       @student.user=current_user
     end
     if @student.save
-      redirect_to students_path
+      redirect_to students_path, notice: "Student created successfully."
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @student=Student.find(params[:id])
   end
 
   def update
-    @student=Student.find(params[:id])
     if @student.update(student_params)
       redirect_to students_path
     else
@@ -74,22 +50,24 @@ class StudentsController < ApplicationController
   end
 
   def destroy
-    @student=Student.find(params[:id])
     @student.destroy
     redirect_to students_path
   end
 
-  def set_student
-  @student =
-    if current_user.admin?
-      Student.find(params[:id])
-    else
-      current_user.students.find(params[:id])
+  private
+    def set_student
+    @student =
+      if current_user.admin?
+        Student.find(params[:id])
+      else
+        current_user.students.find(params[:id])
+      end
     end
-  end
 
   private
     def student_params
-      params.expect(student: [ :name, :email, :age, :course, :city, :marks, :user_id ])
+      permitted = [ :name, :email, :age, :course, :city, :marks ]
+      permitted << :user_id if current_user.admin?
+      params.expect(student: permitted)
     end
 end

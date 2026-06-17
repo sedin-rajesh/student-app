@@ -8,19 +8,19 @@
         <% if current_user.teacher? %>
             <div class="card">
                 <h3>Ruby Students :</h3>
-                <p><%= @ruby_students%></p>
+                <p><%= @course_counts["Ruby"] || 0%></p>
             </div>
             <div class="card">
                 <h3>Rails Students :</h3>
-                <p><%= @rails_students%></p>
+                <p><%= @course_counts["Rails"] || 0%></p>
             </div>
             <div class="card">
                 <h3>React Students :</h3>
-                <p><%= @react_students%></p>
+                <p><%= @course_counts["React"] || 0%></p>
             </div>
             <div class="card">
                 <h3>Java Students :</h3>
-                <p><%= @java_students%></p>
+                <p><%= @course_counts["Java"] || 0%></p>
             </div>
         <% else %>
             <div class="card">
