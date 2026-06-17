@@ -32,6 +32,16 @@
                 <%= form.label :marks %>
                 <%= form.number_field :marks %>
             </div>
+            <% if current_user.admin? %>
+                <div>
+                    <%= form.label :user_id, "Teacher" %>
+                    <%= form.collection_select :user_id,
+                        User.teacher,
+                        :id,
+                        :email,
+                        prompt: "Select Teacher" %>
+                </div>
+            <% end %>
             <div>
                 <%=form.submit%>
             </div>

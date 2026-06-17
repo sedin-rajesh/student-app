@@ -1,8 +1,22 @@
 <nav>
-    <p>🎓Student Dashboard</p>
-    <div>
-        <%= link_to "Dashboard", root_path %>
-        <%= link_to "Student List", students_path %>
-        <%= link_to "Add Student", new_student_path %>
-    </div>
+    <p>🎓Student Management</p>
+        <div>
+            <% if user_signed_in? %>
+            
+            <%= link_to "#{current_user.role.capitalize} Dashboard", root_path %>
+            <%= link_to "Student List", students_path %>
+            <%= link_to "Add Student", new_student_path %>
+            <% if current_user.admin? %>
+                <%= link_to "Teachers", teachers_path %>
+            <% end %>
+            
+            <%= button_to "Logout",
+                destroy_user_session_path,
+                method: :delete,
+                class: "logout-btn" %>
+        <% else %>
+                <%= link_to "Login", new_user_session_path %>
+            <%= link_to "Sign Up", new_user_registration_path %>
+        <% end %>
+        </div>
 </nav>

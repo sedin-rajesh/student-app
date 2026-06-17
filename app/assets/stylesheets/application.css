@@ -25,6 +25,24 @@ nav a{
     margin-inline:5px;
 }
 
+nav>div{
+    display: flex;
+}
+
+.logout-btn{
+    margin-inline:8px;
+    padding: 2px 5px;
+    color: #dc2626; /* Crimson red text/icon color */
+    background-color: #fef2f2; /* Soft red tint background */
+    border: 1px solid #fee2e2;
+    border-radius: 6px;
+  
+}
+
+.user-info{
+    color:white
+}
+
 .dashboard{
     margin: 20px;
 }
@@ -240,3 +258,135 @@ nav a{
     margin:20px;
 }
 
+.teacher-summary {
+  margin-top: 40px;
+}
+
+.teacher-summary table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.teacher-summary th,
+.teacher-summary td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.teacher-summary th {
+  background: #6c63ff;
+  color: white;
+}
+
+.auth-controller,.sign-up-controller{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth,.sign-up{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-block: 20px;
+    width:500px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border-radius: 20px;
+}
+
+.auth h2{
+    color: #333;
+}
+
+.auth.field{
+    display: inline-flex;
+
+}
+
+.auth label,.sign-up label {
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+}
+
+.auth input[type="email"],
+.auth input[type="password"],
+.auth input[type="text"],
+.sign-up input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.actions input  {
+    width: 100%;
+    padding: 12px;
+    background: #3ea5ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ===== Teachers Page ===== */
+
+.teacher {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.teacher-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.teacher-card h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Table */
+
+.teacher-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.teacher-card thead {
+    background: #3ea5ff;
+    color: white;
+}
+
+.teacher-card th,
+.teacher-card td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.teacher-card tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.teacher-card td:last-child,
+.teacher-card th:last-child {
+    text-align: center;
+}
+
+/* Student Count Badge */
+
+.teacher-card td:nth-child(2) {
+    font-weight: bold;
+    color: #6c63ff;
+}

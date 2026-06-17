@@ -1,0 +1,23 @@
+<div class="teacher">
+  <div class="teacher-card">
+    <h1>Teachers</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Students</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @teachers.each do |teacher| %>
+          <tr>
+            <td><%= teacher.email %></td>
+            <td><%= teacher.students.count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
