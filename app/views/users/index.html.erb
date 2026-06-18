@@ -11,10 +11,10 @@
       </thead>
 
       <tbody>
-        <% @teachers.each do |teacher| %>
+        <% @users.each do |user| %>
           <tr>
-            <td><%= teacher.email %></td>
-            <td><%= teacher.students.count %></td>
+            <td><%= user.email %></td>
+            <td><%= user.students.count %></td>
           </tr>
         <% end %>
       </tbody>

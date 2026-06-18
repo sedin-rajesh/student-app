@@ -7,7 +7,7 @@
             <%= link_to "Student List", students_path %>
             <%= link_to "Add Student", new_student_path %>
             <% if current_user.admin? %>
-                <%= link_to "Teachers", teachers_path %>
+                <%= link_to "Teachers", users_path(role: :teacher) %>
             <% end %>
             
             <%= button_to "Logout",

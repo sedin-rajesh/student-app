@@ -43,7 +43,7 @@ class StudentsController < ApplicationController
 
   def update
     if @student.update(student_params)
-      redirect_to students_path
+      redirect_to students_path, notice: "Student updated successfully"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -51,7 +51,7 @@ class StudentsController < ApplicationController
 
   def destroy
     @student.destroy
-    redirect_to students_path
+    redirect_to students_path, notice: "Student deleted successfully"
   end
 
   private

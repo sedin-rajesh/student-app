@@ -390,3 +390,21 @@ nav>div{
     font-weight: bold;
     color: #6c63ff;
 }
+
+.notice{
+    position:fixed;
+    top:60px;
+    left:40%;
+    background-color: #22c55e;
+    border-left: 5px solid #15803d;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}

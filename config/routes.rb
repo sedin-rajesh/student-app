@@ -3,5 +3,5 @@ Rails.application.routes.draw do
   root "dashboard#dashboard"
   get "dashboard", to: "dashboard#dashboard"
   resources :students
-  resources :teachers, only: [ :index ]
+  resources :users, only: [ :index ]
 end
