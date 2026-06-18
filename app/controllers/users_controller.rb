@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
-    @users = @users.where(role: params[:role]) if params[:role].present?
+    @users = @users.by_role(params[:role])
   end
 
   private

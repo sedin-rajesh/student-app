@@ -6,13 +6,7 @@ class StudentsController < ApplicationController
     else
       @students=current_user.students
     end
-    if params[:search].present?
-      search = "%#{params[:search]}%"
-      @students = @students.where(
-        "name LIKE :search OR email LIKE :search",
-         search: search
-      )
-    end
+    @students = @students.search(params[:search])
 
     if params[:course].present?
       @students = @students.where(course: params[:course])
