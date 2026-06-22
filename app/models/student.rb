@@ -1,5 +1,5 @@
 class Student < ApplicationRecord
-    belongs_to :user
+    belongs_to :user, counter_cache: true
     COURSES = %w[Ruby Rails React Java].freeze
     validates :name, presence: true
     validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

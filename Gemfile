@@ -69,6 +69,8 @@ group :development do
 
   # Detect N+1 queries and unused eager loading
   gem "bullet"
+
+  gem "letter_opener"
 end
 
 group :test do
