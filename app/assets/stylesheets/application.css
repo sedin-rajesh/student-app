@@ -1,0 +1,410 @@
+body{
+    margin:0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.main-content {
+    flex: 1;
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: rgb(62, 165, 255);
+    margin:none;
+}   
+nav p{
+    margin:0;
+    color: white;
+}
+nav a{
+    text-decoration: none;
+    color:white;
+    margin-inline:5px;
+}
+
+nav>div{
+    display: flex;
+}
+
+.logout-btn{
+    margin-inline:8px;
+    padding: 2px 5px;
+    color: #dc2626; /* Crimson red text/icon color */
+    background-color: #fef2f2; /* Soft red tint background */
+    border: 1px solid #fee2e2;
+    border-radius: 6px;
+  
+}
+
+.user-info{
+    color:white
+}
+
+.dashboard{
+    margin: 20px;
+}
+.dashboard-content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-inline:20px;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    border-radius: 20px;
+}
+.footer {
+    background-color: rgb(62, 165, 255);
+    color: white;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.student{
+    margin:20px;
+}
+
+.filter{
+    display: inline-flex;
+    justify-content: center;
+}
+
+.show{
+    display: flex;
+    flex-direction: column;
+    margin:20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.show-student{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.show a,.add-student a,.edit a{
+    text-decoration: none;
+    margin-block: 10px;;
+    padding:8px;
+    background-color: #333;
+    color:white;
+    border-radius: 10px;
+}
+
+.student {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.student h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.filter {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.filter form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-input input,
+.search-filter select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    min-width: 220px;
+    font-size: 14px;
+}
+
+.filter-button input {
+    padding: 10px 20px;
+    background: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#student {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.student-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 500px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.student-card p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.actions a,.actions form button {
+    text-decoration: none;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.actions a:first-child {
+    background: #3498db;
+}
+
+.actions a:nth-child(2) {
+    background: #f39c12;
+}
+
+.actions form button {
+    background: #e74c3c;
+}
+
+.edit{
+    margin:20px;
+
+}
+
+.form{
+    box-shadow:  0 3px 12px rgba(0,0,0,0.08);
+    margin-block:20px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+
+
+.form input,.form select {
+    padding: 12px;
+    margin-block:10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.form label {
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form input[type="submit"] {
+    padding: 8px;
+    background: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.error {
+    background: #ffe5e5;
+    width: 500  px;
+    color: #d63031;
+    padding: 5px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+.add-student{
+    margin:20px;
+}
+
+.teacher-summary {
+  margin-top: 40px;
+}
+
+.teacher-summary table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.teacher-summary th,
+.teacher-summary td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.teacher-summary th {
+  background: #6c63ff;
+  color: white;
+}
+
+.auth-controller,.sign-up-controller{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth,.sign-up{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-block: 20px;
+    width:500px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border-radius: 20px;
+}
+
+.auth h2{
+    color: #333;
+}
+
+.auth.field{
+    display: inline-flex;
+
+}
+
+.auth label,.sign-up label {
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+}
+
+.auth input[type="email"],
+.auth input[type="password"],
+.auth input[type="text"],
+.sign-up input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.actions input  {
+    width: 100%;
+    padding: 12px;
+    background: #3ea5ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ===== Teachers Page ===== */
+
+.teacher {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.teacher-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.teacher-card h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Table */
+
+.teacher-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.teacher-card thead {
+    background: #3ea5ff;
+    color: white;
+}
+
+.teacher-card th,
+.teacher-card td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.teacher-card tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.teacher-card td:last-child,
+.teacher-card th:last-child {
+    text-align: center;
+}
+
+/* Student Count Badge */
+
+.teacher-card td:nth-child(2) {
+    font-weight: bold;
+    color: #6c63ff;
+}
+
+.notice{
+    position:fixed;
+    top:60px;
+    left:40%;
+    background-color: #22c55e;
+    border-left: 5px solid #15803d;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}

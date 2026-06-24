@@ -1,0 +1,45 @@
+<div class="dashboard">
+    <h2>🎓Dashboard</h2>
+    <div class="dashboard-content">
+        <div class="card">
+            <h3>Total Students :</h3>
+            <p><%= @total_students%></p>
+        </div>
+        <% if current_user.teacher? %>
+            <% Student::COURSES.each do |course| %>
+                <div class="card">
+                    <h3><%= course %> Students :</h3>
+                    <p><%= @course_counts[course] || 0 %></p>
+                </div>
+            <% end %>
+        <% else %>
+            <div class="card">
+                <h3>Total Teachers :</h3>
+                <p><%= @total_teachers %></p>
+            </div>
+        <% end %>
+    </div>
+    <% if current_user.admin? %>
+        <div class="teacher-summary">
+            <h3>Students Per Teacher</h3>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Teacher</th>
+                    <th>Students</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <% @students_per_teacher.each do |teacher_email, count| %>
+                    <tr>
+                    <td><%= teacher_email %></td>
+                    <td><%= count %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+        </div>
+    <% end %>
+</div>
