@@ -49,6 +49,8 @@ gem "image_processing", "~> 1.2"
 
 gem "devise"
 
+gem "devise-jwt"
+
 group :development, :test do
   # Debugging
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
