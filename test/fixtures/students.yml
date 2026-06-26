@@ -1,15 +1,15 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  name: MyString
-  email: MyString
-  age: 1
-  course: MyString
-  city: MyString
+  name: Student One
+  email: student1@example.com
+  age: 15
+  course: Math
+  city: New York
+  user: one
 
 two:
-  name: MyString
-  email: MyString
-  age: 1
-  course: MyString
-  city: MyString
+  name: Student Two
+  email: student2@example.com
+  age: 16
+  course: Science
+  city: Boston
+  user: one
