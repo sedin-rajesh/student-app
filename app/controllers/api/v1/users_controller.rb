@@ -16,9 +16,7 @@ class Api::V1::UsersController < Api::V1::BaseController
     if user.save
       render json: user, status: :created
     else
-      render json: {
-        errors: user.errors.full_messages
-      }, status: :unprocessable_entity
+      render_validation_error(user)
     end
   end
 
@@ -29,9 +27,7 @@ class Api::V1::UsersController < Api::V1::BaseController
         user: @user
       }
     else
-      render json: {
-        errors: @user.errors.full_messages
-      }, status: :unprocessable_entity
+      render_validation_error(@user)
     end
   end
 
@@ -65,6 +61,7 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def require_admin
-    render json: { error: "Access denied" }, status: :forbidden unless current_user&.admin?
+    return if current_user&.admin?
+    render json: { error: "Access denied" }, status: :forbidden
   end
 end

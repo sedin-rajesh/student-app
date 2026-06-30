@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
-  root "dashboard#dashboard"
-  get "dashboard", to: "dashboard#dashboard"
+  root "dashboard#index"
+  get "dashboard", to: "dashboard#index"
   resources :students
   resources :users, only: [ :index ]
   namespace :api do
@@ -11,8 +11,6 @@ Rails.application.routes.draw do
         delete "logout", to: "sessions#destroy"
       end
       resources :students
-      get  "teachers/:teacher_id/students", to: "students#teacher_students"
-      post "teachers/:teacher_id/students", to: "students#create_for_teacher"
       resources :users do
         collection do
           get :teachers_by_subject

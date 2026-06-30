@@ -1,13 +1,12 @@
 module Api
   module V1
     class SessionsController < Devise::SessionsController
-      skip_before_action :authenticate_user!, only: [ :create, :destroy ]
+      skip_before_action :authenticate_user!, only: [ :create ]
       skip_before_action :verify_authenticity_token
 
       private
 
       def respond_with(resource, _opts = {})
-        Rails.logger.info "==== LOGIN SUCCESS ===="
         token = request.env["warden-jwt_auth.token"]
 
         render json: {

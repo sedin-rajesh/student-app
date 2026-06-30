@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  def dashboard
+  def index
     if current_user.admin?
       @total_students = Student.count
       @total_teachers = User.teacher.count
