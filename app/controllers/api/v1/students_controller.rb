@@ -11,13 +11,16 @@ class Api::V1::StudentsController < Api::V1::BaseController
   end
 
   def create
-    if params[:teacher_id].present?
-      teacher = User.teacher.find(params[:teacher_id])
-      student = teacher.students.build(student_params)
-    else
-      student = Student.new(student_params)
-      student.user = current_user if current_user.teacher?
-    end
+    student =
+      if current_user.admin?
+        if params[:teacher_id].present?
+          User.teacher.find(params[:teacher_id]).students.build(student_params)
+        else
+          Student.new(student_params)
+        end
+      else
+        current_user.students.build(student_params)
+      end
     if student.save
       render json: student, status: :created
     else
@@ -56,9 +59,8 @@ class Api::V1::StudentsController < Api::V1::BaseController
     end
 
     def students_scope
-      if params[:teacher_id].present?
-        User.teacher.find(params[:teacher_id]).students
-      elsif current_user.admin?
+      if current_user.admin?
+        return User.teacher.find(params[:teacher_id]).students if params[:teacher_id].present?
         Student.all
       else
         current_user.students
