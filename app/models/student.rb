@@ -1,6 +1,10 @@
 class Student < ApplicationRecord
     belongs_to :user, counter_cache: true
+    has_one_attached :profile_photo
+    has_many_attached :documents
     COURSES = %w[Ruby Rails React Java].freeze
+    validate :validate_profile_photo
+    validate :validate_documents
     validates :name, presence: true
     validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
     validates :age, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -37,5 +41,27 @@ class Student < ApplicationRecord
 
   def result
     marks >= 35 ? "Pass" : "Fail"
+  end
+
+  private
+  def validate_profile_photo
+    return unless profile_photo.attached?
+    unless profile_photo.content_type.in?(%w[image/jpeg image/png image/jpg])
+      errors.add(:profile_photo, "must be a JPEG or PNG image")
+    end
+    if profile_photo.byte_size > 5.megabytes
+      errors.add(:profile_photo, "size must be less than 5MB")
+    end
+  end
+
+  def validate_documents
+    documents.each do |document|
+      unless document.content_type.in?(%w[application/pdf image/jpeg image/png])
+        errors.add(:documents, "must be a PDF or an image (JPEG/PNG)")
+      end
+      if document.byte_size > 10.megabytes
+        errors.add(:documents, "size must be less than 10MB")
+      end
+    end
   end
 end

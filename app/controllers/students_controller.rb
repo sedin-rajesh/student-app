@@ -48,6 +48,17 @@ class StudentsController < ApplicationController
     redirect_to students_path, notice: "Student deleted successfully"
   end
 
+  def remove_profile_photo
+    @student.profile_photo.purge
+    redirect_to students_path, notice: "Profile photo removed successfully"
+  end
+
+  def remove_document
+    document = @student.documents.find(params[:attachment_id])
+    document.purge
+    redirect_to @student
+  end
+
   private
     def set_student
     @student =
@@ -60,7 +71,7 @@ class StudentsController < ApplicationController
 
   private
     def student_params
-      permitted = [ :name, :email, :age, :course, :city, :marks ]
+      permitted = [ :name, :email, :age, :course, :city, :marks, :profile_photo, documents: [] ]
       permitted << :user_id if current_user.admin?
       params.expect(student: permitted)
     end

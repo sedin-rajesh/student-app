@@ -2,6 +2,8 @@
     <h2>Add Student</h2>
     <div class="form-content">
         <%= form_with model: @student do |form|%>
+            <%= form.label :profile_photo %>
+            <%= form.file_field :profile_photo, accept: "image/png,image/jpeg,image/jpg" %>
             <% if form.object.errors.any? %>
                 <h2 class="error"><%= form.object.errors.full_messages.first %></h2>
             <% end %>
@@ -42,6 +44,8 @@
                         prompt: "Select Teacher" %>
                 </div>
             <% end %>
+            <%= form.label :documents %>
+                <%= form.file_field :documents, multiple: true, accept: ".pdf,.jpg,.jpeg,.png" %>
             <div>
                 <%=form.submit%>
             </div>

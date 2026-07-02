@@ -1,8 +1,21 @@
 Rails.application.routes.draw do
   devise_for :users
-  root "dashboard#index"
+  authenticated :user do
+    root "dashboard#index", as: :authenticated_root
+  end
+  unauthenticated do
+    root to: redirect("/users/sign_in")
+  end
   get "dashboard", to: "dashboard#index"
   resources :students
+  resources :students do
+    member do
+      delete :remove_profile_photo
+    end
+  end
+  resources :students do
+    delete :remove_document, on: :member
+  end
   resources :users, only: [ :index ]
   namespace :api do
     namespace :v1 do
