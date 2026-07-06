@@ -1,5 +1,5 @@
 class Api::V1::StudentsController < Api::V1::BaseController
-  before_action :set_student, only: [ :show, :update, :destroy ]
+  before_action :set_student, only: [ :show, :update, :destroy, :report_card ]
 
   def index
     students = students_scope.apply_filter(params)
@@ -22,6 +22,7 @@ class Api::V1::StudentsController < Api::V1::BaseController
         current_user.students.build(student_params)
       end
     if student.save
+      NotificationMailer.student_created(@student).deliver_now
       render json: student, status: :created
     else
       render_validation_error(student)
@@ -31,6 +32,16 @@ class Api::V1::StudentsController < Api::V1::BaseController
   def update
     if @student.update(student_params)
       render json: @student
+      if @student.saved_change_to_user_id? && @student.user.present?
+        NotificationMailer.teacher_assigned(@student).deliver_now
+        NotificationMailer.student_assigned(@student).deliver_now
+      end
+      if documents_uploaded
+        NotificationMailer.documents_uploaded(@student).deliver_now
+      end
+      if @student.saved_change_to_marks?
+        NotificationMailer.marks_posted(@student).deliver_now
+      end
     else
       render_validation_error(@student)
     end
@@ -41,6 +52,18 @@ class Api::V1::StudentsController < Api::V1::BaseController
     head :no_content
   end
 
+  def report_card
+    pdf = ReportCardPdf.new(@student).render
+    NotificationMailer
+      .report_card(@student)
+      .deliver_now
+    send_data(
+      pdf,
+      filename: "ReportCard.pdf",
+      type: "application/pdf",
+      disposition: "attachment"
+    )
+  end
 
   private
     def set_student

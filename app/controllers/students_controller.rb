@@ -26,6 +26,7 @@ class StudentsController < ApplicationController
       @student.user=current_user
     end
     if @student.save
+      NotificationMailer.student_created(@student).deliver_now
       redirect_to students_path, notice: "Student created successfully."
     else
       render :new, status: :unprocessable_entity
@@ -36,8 +37,19 @@ class StudentsController < ApplicationController
   end
 
   def update
+    documents_uploaded = params.dig(:student, :documents).present?
     if @student.update(student_params)
       redirect_to students_path, notice: "Student updated successfully"
+      if @student.saved_change_to_user_id? && @student.user.present?
+        NotificationMailer.teacher_assigned(@student).deliver_now
+        NotificationMailer.student_assigned(@student).deliver_now
+      end
+      if documents_uploaded
+        NotificationMailer.documents_uploaded(@student).deliver_now
+      end
+      if @student.saved_change_to_marks?
+        NotificationMailer.marks_posted(@student).deliver_now
+      end
     else
       render :edit, status: :unprocessable_entity
     end

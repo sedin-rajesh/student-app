@@ -51,6 +51,8 @@ gem "devise"
 
 gem "devise-jwt"
 
+gem "prawn"
+
 group :development, :test do
   # Debugging
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -73,6 +75,8 @@ group :development do
   gem "bullet"
 
   gem "letter_opener"
+
+  gem "letter_opener_web", "~> 3.0"
 end
 
 group :test do

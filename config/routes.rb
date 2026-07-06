@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   devise_for :users
   authenticated :user do
     root "dashboard#index", as: :authenticated_root
@@ -7,7 +8,6 @@ Rails.application.routes.draw do
     root to: redirect("/users/sign_in")
   end
   get "dashboard", to: "dashboard#index"
-  resources :students
   resources :students do
     member do
       delete :remove_profile_photo
@@ -23,7 +23,11 @@ Rails.application.routes.draw do
         post "login", to: "sessions#create"
         delete "logout", to: "sessions#destroy"
       end
-      resources :students
+      resources :students do
+        member do
+          get :report_card
+        end
+      end
       resources :users do
         collection do
           get :teachers_by_subject
