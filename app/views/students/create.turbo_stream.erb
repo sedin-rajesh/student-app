@@ -1,0 +1,15 @@
+<%= turbo_stream.append "students" do %>
+  <%= render @student %>
+<% end %>
+
+<%= turbo_stream.update "students_count" do %>
+  Total Students: <%= Student.count %>
+<% end %>
+
+<%= turbo_stream.update "flash" do %>
+  <%= render "flash" %>
+<% end %>
+
+<%= turbo_stream.replace "student_form" do %>
+  <%= turbo_frame_tag "student_form" %>
+<% end %>

@@ -22,7 +22,7 @@ class Api::V1::StudentsController < Api::V1::BaseController
         current_user.students.build(student_params)
       end
     if student.save
-      NotificationMailer.student_created(@student).deliver_now
+      NotificationMailer.student_created(student).deliver_now
       render json: student, status: :created
     else
       render_validation_error(student)
@@ -30,6 +30,7 @@ class Api::V1::StudentsController < Api::V1::BaseController
   end
 
   def update
+    documents_uploaded = params.dig(:student, :documents).present?
     if @student.update(student_params)
       render json: @student
       if @student.saved_change_to_user_id? && @student.user.present?

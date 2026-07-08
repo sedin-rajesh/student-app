@@ -26,7 +26,7 @@
   <body>
     <%= render "students/navbar"%>
     <% if notice %>
-      <div id="flash-notice" class="notice">
+      <div id="flash-notice" class="notice" data-controller="flash">
         <%= notice %>
       </div>
     <% end %>

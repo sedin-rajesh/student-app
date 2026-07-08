@@ -20,6 +20,6 @@
         <% end %>
     </div>
     <div>
-        <%= link_to "Back", students_path%>
+        <%= link_to "Back", students_path(search: params[:search], course: params[:course]) %>
     </div>
 </div>

@@ -1,7 +1,10 @@
 <div class="form">
     <h2>Add Student</h2>
     <div class="form-content">
-        <%= form_with model: @student do |form|%>
+        <%= form_with model: @student, data:{
+            controller: "student-form",
+            student_form_max_length_value:50
+        } do |form|%>
             <%= form.label :profile_photo %>
             <%= form.file_field :profile_photo, accept: "image/png,image/jpeg,image/jpg" %>
             <% if form.object.errors.any? %>
@@ -10,29 +13,38 @@
 
             <div>
                 <%=form.label :name%>
-                <%= form.text_field :name%>
+                <%= form.text_field :name, maxlength: 50, data: { student_form_target: "name",action: "input->student-form#updateCounter" } %>
+                <span data-student-form-target="counter">0/50 characters</span>
             </div>
             <div>
                 <%=form.label :email%>
-                <%= form.text_field :email%>
+                <%= form.text_field :email, data: { student_form_target: "email",action: "input->student-form#validateForm" } %>
             </div>
             <div>
                 <%=form.label :age%>
-                <%= form.number_field :age%>
+                <%= form.number_field :age, data: { student_form_target: "age",action: "input->student-form#validateForm" } %>
             </div>
             <div>
                 <%= form.label :course %>
                 <%= form.select :course,
                     Student::COURSES,
-                    prompt: "All Courses" %>
+                    {prompt: "All Courses"},
+                    {
+                        data: {
+                            student_form_target: "course",
+                            action: "change->student-form#validateForm"
+                        }
+                    } %>
             </div>
             <div>
                 <%=form.label :city%>
-                <%= form.text_field :city%>
+                <%= form.text_field :city, data: { student_form_target: "city",action: "input->student-form#validateForm" } %>
             </div>
             <div>
                 <%= form.label :marks %>
-                <%= form.number_field :marks %>
+                <%= form.number_field :marks,
+                    data: { student_form_target: "marks",action: "input->student-form#validateForm" } 
+                %>
             </div>
             <% if current_user.admin? %>
                 <div>
@@ -47,7 +59,7 @@
             <%= form.label :documents %>
                 <%= form.file_field :documents, multiple: true, accept: ".pdf,.jpg,.jpeg,.png" %>
             <div>
-                <%=form.submit%>
+                <%=form.submit "Save", disabled: true, data: { student_form_target: "submit" }%>
             </div>
         <% end %>
     </div>

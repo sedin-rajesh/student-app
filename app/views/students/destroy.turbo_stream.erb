@@ -1,0 +1,7 @@
+<%= turbo_stream.remove @student %>
+<%= turbo_stream.update "students_count" do %>
+  Total Students: <%= Student.count %>
+<% end %>
+<%= turbo_stream.update "flash" do %>
+  <%= render "flash" %>
+<% end %>
