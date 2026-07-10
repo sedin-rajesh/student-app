@@ -16,29 +16,31 @@
         <% @student.documents.each do |document| %>
             <%= link_to document.filename, url_for(document) %>
             <%= link_to "Delete", remove_document_student_path( @student, attachment_id: document.id ), data: { turbo_method: :delete } %>
-            <%= link_to "Dowload", rails_blob_path(document, disposition: "attachment") %>
+            <%= link_to "Download", rails_blob_path(document, disposition: "attachment") %>
         <% end %>
     </div>
     <div class="report-card">
+
         <%= button_to "Generate Report Card",
               generate_report_card_student_path(@student),
               method: :post,
               class: "btn" %>
-
-        <% if @student.report_card.attached? %>
-        <div class="generated-report">
-            <h3>Generated Report</h3>
-
-            <%= link_to "Download Report Card",
-                        rails_blob_path(
-                        @student.report_card,
-                        disposition: "attachment"
-                        ),
-                        class: "btn" %>
+        <div>
+            <%= link_to "Back", students_path(search: params[:search], course: params[:course]) %>
         </div>
-        <% end %>
+        <% if @student.report_card.attached? %>
+            <div class="generated-report">
+                <h3>Generated Report</h3>
+
+                <%= link_to "Download Report Card",
+                            rails_blob_path(
+                            @student.report_card,
+                            disposition: "attachment"
+                            ),
+                            class: "btn" %>
+                <% end %>
+        </div>
+        
     </div>
-    <div>
-        <%= link_to "Back", students_path(search: params[:search], course: params[:course]) %>
-    </div>
+    
 </div>

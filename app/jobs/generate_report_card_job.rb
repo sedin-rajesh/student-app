@@ -5,6 +5,5 @@ class GenerateReportCardJob < ApplicationJob
     student = Student.find(id)
     pdf = ReportCardPdf.new(student).render
     student.report_card.attach(io: StringIO.new(pdf), filename: "report_card.pdf",content_type: "application/pdf")
-    NotificationMailer.report_card(student).deliver_later
   end
 end

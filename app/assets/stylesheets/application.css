@@ -475,3 +475,12 @@ nav>div{
     border-radius: 8px;
     border: none;
 }
+
+.report-card .btn{
+    color:white;
+    margin-block:10px;
+    padding: 10px 12px;
+    background-color: #3ea5ff;
+    border: none;
+    border-radius: 8px;
+}
