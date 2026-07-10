@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :generate_report_card ]
   def index
     if current_user.admin?
       @students = Student.all
@@ -35,7 +35,7 @@ class StudentsController < ApplicationController
       @student.user=current_user
     end
     if @student.save
-      NotificationMailer.student_created(@student).deliver_now
+      NotificationMailer.student_created(@student).deliver_later
       flash.now[:notice] = "Student created successfully."
       respond_to do |format|
         format.turbo_stream do
@@ -68,14 +68,14 @@ class StudentsController < ApplicationController
     documents_uploaded = Array(params.dig(:student, :documents)).reject(&:blank?).any?
     if @student.update(student_params)
       if @student.saved_change_to_user_id? && @student.user.present?
-        NotificationMailer.teacher_assigned(@student).deliver_now
-        NotificationMailer.student_assigned(@student).deliver_now
+        NotificationMailer.teacher_assigned(@student).deliver_later
+        NotificationMailer.student_assigned(@student).deliver_later
       end
       if documents_uploaded
-        NotificationMailer.documents_uploaded(@student).deliver_now
+        NotificationMailer.documents_uploaded(@student).deliver_later
       end
       if @student.saved_change_to_marks?
-        NotificationMailer.marks_posted(@student).deliver_now
+        NotificationMailer.marks_posted(@student).deliver_later
       end
       respond_to do |format|
         format.html { redirect_to students_path, notice: "Student updated successfully" }
@@ -119,6 +119,12 @@ class StudentsController < ApplicationController
     redirect_to @student
   end
 
+  def generate_report_card
+    @student = Student.find(params[:id])
+    GenerateReportCardJob.perform_later(@student.id)
+    redirect_to @student, notice: "Report card generation has been queued. You will receive an email once it's ready."
+    NotificationMailer.report_card(@student).deliver_later
+  end
   private
     def set_student
     @student =

@@ -22,7 +22,7 @@ class Api::V1::StudentsController < Api::V1::BaseController
         current_user.students.build(student_params)
       end
     if student.save
-      NotificationMailer.student_created(student).deliver_now
+      NotificationMailer.student_created(student).deliver_later
       render json: student, status: :created
     else
       render_validation_error(student)
@@ -34,14 +34,14 @@ class Api::V1::StudentsController < Api::V1::BaseController
     if @student.update(student_params)
       render json: @student
       if @student.saved_change_to_user_id? && @student.user.present?
-        NotificationMailer.teacher_assigned(@student).deliver_now
-        NotificationMailer.student_assigned(@student).deliver_now
+        NotificationMailer.teacher_assigned(@student).deliver_later
+        NotificationMailer.student_assigned(@student).deliver_later
       end
       if documents_uploaded
-        NotificationMailer.documents_uploaded(@student).deliver_now
+        NotificationMailer.documents_uploaded(@student).deliver_later
       end
       if @student.saved_change_to_marks?
-        NotificationMailer.marks_posted(@student).deliver_now
+        NotificationMailer.marks_posted(@student).deliver_later
       end
     else
       render_validation_error(@student)

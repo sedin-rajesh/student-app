@@ -2,6 +2,7 @@ class Student < ApplicationRecord
     belongs_to :user, counter_cache: true
     has_one_attached :profile_photo
     has_many_attached :documents
+    has_one_attached :report_card
     COURSES = %w[Ruby Rails React Java].freeze
     validate :validate_profile_photo
     validate :validate_documents
