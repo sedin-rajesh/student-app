@@ -36,6 +36,7 @@ nav>div{
     background-color: #fef2f2; /* Soft red tint background */
     border: 1px solid #fee2e2;
     border-radius: 6px;
+    cursor: pointer;
   
 }
 

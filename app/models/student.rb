@@ -10,14 +10,29 @@ class Student < ApplicationRecord
 
     scope :search, ->(term) {
       return all if term.blank?
-      search_term = "%#{sanitize_sql_like(term)}"
+      search_term = "%#{sanitize_sql_like(term)}%"
       where(
         "name LIKE :search or email LIKE :search", search: search_term
       )
     }
 
     scope :by_course, ->(course) {
-      course.present? ?where(course: course):all
+      course.present? ? where(course: course):all
+    }
+
+    scope :search_by_name, ->(name) {
+      name.present? ? where("name LIKE ?", "%#{sanitize_sql_like(name)}%") : all
+    }
+
+    scope :filter_by_grade, ->(grade) {
+      grade.present? ? where(grade: grade) : all
+    }
+
+    scope :apply_filter, ->(params) {
+      search(params[:search])
+      .search_by_name(params[:name])
+      .filter_by_grade(params[:grade])
+      .by_course(params[:course])
     }
 
   def result

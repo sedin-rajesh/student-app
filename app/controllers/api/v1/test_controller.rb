@@ -1,0 +1,65 @@
+class Api::V1::UsersController < Api::V1::BaseController
+  before_action :require_admin
+  before_action :set_user, only: [ :show, :update, :destroy ]
+  def index
+    users = User.all
+    users = users.by_role(params[:role])
+    render json: users
+  end
+
+  def show
+    render json: @user
+  end
+
+  def create
+    user=User.new(user_params)
+    if user.save
+      render json: user, status: :created
+    else
+      render_validation_error(user)
+    end
+  end
+
+  def update
+    if @user.update(user_params)
+      render json: {
+        message: "User updated successfully",
+        user: @user
+      }
+    else
+      render_validation_error(@user)
+    end
+  end
+
+  def destroy
+    @user.destroy
+
+    head :no_content
+  end
+
+  def teachers_by_subject
+    teachers = User.teacher
+    teachers = teachers.where(subject: params[:subject]) if params[:subject].present?
+    render json: teachers
+  end
+
+  private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def user_params
+    params.require(:user).permit(
+      :email,
+      :password,
+      :password_confirmation,
+      :role
+    )
+  end
+
+  def require_admin
+    return if current_user&.admin?
+    render json: { error: "Access denied" }, status: :forbidden
+  end
+end
