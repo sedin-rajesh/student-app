@@ -1,4 +1,12 @@
 <div class="show">
+    <% if @student.profile_photo.attached? %>
+        <%= image_tag @student.profile_photo, width: 150 %>
+        <%= button_to "Remove Profile Photo", remove_profile_photo_student_path(@student),
+        method: :delete,
+        data: { turbo_confirm: "Are you sure you want to remove the profile photo?" },
+        class: "remove-profile-photo-button"
+        %>
+    <% end %>
     <h2><%= @student.name%></h2>
     <div class="show-student">
         <h3>Email:</h3><p><%= @student.email%> </p>
@@ -6,6 +14,15 @@
         <h3>Course:</h3><p><%= @student.course%></p>
         <h3>City:</h3><p><%= @student.city%></p>
         <h3>Results:</h3><p><%= @student.result%> </p>
+        
+    </div>
+    <div class="show-documents">
+        <h3>Documents:</h3>
+        <% @student.documents.each do |document| %>
+            <%= link_to document.filename, url_for(document) %>
+            <%= link_to "Delete", remove_document_student_path( @student, attachment_id: document.id ), data: { turbo_method: :delete } %>
+            <%= link_to "Download", rails_blob_path(document, disposition: "attachment") %>
+        <% end %>
     </div>
     <div>
         <%= link_to "Back", students_path%>

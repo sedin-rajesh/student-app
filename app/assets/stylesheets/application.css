@@ -74,15 +74,6 @@ nav>div{
     flex-wrap: wrap;
 }
 
-.student{
-    margin:20px;
-}
-
-.filter{
-    display: inline-flex;
-    justify-content: center;
-}
-
 .show{
     display: flex;
     flex-direction: column;
@@ -107,6 +98,17 @@ nav>div{
     border-radius: 10px;
 }
 
+.show-documents{
+    margin-block: 20px;
+}
+
+.show-documents a{
+    border: 2px solid #3ea5ff;
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+}
+
 .student {
     max-width: 1200px;
     margin: 40px auto;
@@ -123,6 +125,8 @@ nav>div{
 }
 
 .filter {
+    display: inline-flex;
+    justify-content: center;
     background: #fff;
     padding: 20px;
     border-radius: 12px;
@@ -246,7 +250,7 @@ nav>div{
 
 .error {
     background: #ffe5e5;
-    width: 500  px;
+    width: 500px;
     color: #d63031;
     padding: 5px;
     border-radius: 8px;
@@ -408,4 +412,15 @@ nav>div{
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     animation: slideIn 0.3s ease-out;
+}
+
+.remove-profile-photo-button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #e74c3c; /* Red color for delete action */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
 }
