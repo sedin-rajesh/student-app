@@ -1,10 +1,10 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :remove_profile_photo, :remove_document ]
   def index
     if current_user.admin?
       @students = Student.all
     else
-      @students=current_user.students
+      @students = current_user.students
     end
     @students = @students.search(params[:search])
 
@@ -14,16 +14,16 @@ class StudentsController < ApplicationController
   end
 
   def new
-    @student=Student.new
+    @student = Student.new
   end
 
   def show
   end
 
   def create
-    @student=Student.new(student_params)
+    @student = Student.new(student_params)
     if current_user.teacher?
-      @student.user=current_user
+      @student.user = current_user
     end
     if @student.save
       redirect_to students_path, notice: "Student created successfully."
@@ -37,7 +37,7 @@ class StudentsController < ApplicationController
 
   def update
     if @student.update(student_params)
-      redirect_to students_path, notice: "Student updated successfully"
+      redirect_to @student, notice: "Student updated successfully"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -49,14 +49,18 @@ class StudentsController < ApplicationController
   end
 
   def remove_profile_photo
-    @student.profile_photo.purge
-    redirect_to students_path, notice: "Profile photo removed successfully"
+    if @student.profile_photo.attached?
+      @student.profile_photo.purge
+      redirect_to @student, notice: "Profile photo removed successfully"
+    else
+      redirect_to @student, alert: "No profile photo to remove"
+    end
   end
 
   def remove_document
     document = @student.documents.find(params[:attachment_id])
     document.purge
-    redirect_to @student
+    redirect_to @student, notice: "Document removed successfully"
   end
 
   private
@@ -69,7 +73,6 @@ class StudentsController < ApplicationController
       end
     end
 
-  private
     def student_params
       permitted = [ :name, :email, :age, :course, :city, :marks, :profile_photo, documents: [] ]
       permitted << :user_id if current_user.admin?

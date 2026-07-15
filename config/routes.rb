@@ -7,15 +7,13 @@ Rails.application.routes.draw do
     root to: redirect("/users/sign_in")
   end
   get "dashboard", to: "dashboard#index"
-  resources :students
   resources :students do
     member do
       delete :remove_profile_photo
+      delete "documents/:attachment_id", action: :remove_document, as: :remove_document
     end
   end
-  resources :students do
-    delete :remove_document, on: :member
-  end
+
   resources :users, only: [ :index ]
   namespace :api do
     namespace :v1 do
