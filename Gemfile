@@ -67,6 +67,10 @@ group :development, :test do
 
   # Rails style guide and RuboCop configuration
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  
 end
 
 group :development do
@@ -85,4 +89,6 @@ group :test do
   # System testing
   gem "capybara"
   gem "selenium-webdriver"
+  gem "simplecov", require: false
+  gem "shoulda-matchers"
 end

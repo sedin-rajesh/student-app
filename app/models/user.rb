@@ -13,5 +13,5 @@ class User < ApplicationRecord
 
   has_many :students, dependent: :destroy
 
-  scope :by_role, ->(role) { role.present? ? where(role: role):all }
+  scope :by_role, ->(role) { role.present? ? where(role: role) : all }
 end
