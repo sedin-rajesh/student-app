@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :students do
     member do
       delete :remove_profile_photo
-      delete :remove_document, on: :member
+      delete :remove_document
     end
   end
   resources :users, only: [ :index ]
