@@ -14,10 +14,6 @@ class NotificationMailer < ApplicationMailer
       to: @student.email,
       subject: "A teacher has been assigned to you!"
     )
-    mail(
-      to: @teacher.email,
-      subject: "You have been assigned a new student"
-    )
   end
 
   def student_assigned(student)
