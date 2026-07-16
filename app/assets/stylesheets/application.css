@@ -417,7 +417,7 @@ nav>div{
 .remove-profile-photo-button {
     margin-top: 10px;
     padding: 6px 12px;
-    background-color: #e74c3c; /* Red color for delete action */
+    background-color: #e74c3c; 
     color: white;
     border: none;
     border-radius: 6px;

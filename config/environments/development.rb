@@ -47,6 +47,8 @@ Rails.application.configure do
     port: 3000
   }
 
+  config.action_mailer.perform_deliveries = true
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 

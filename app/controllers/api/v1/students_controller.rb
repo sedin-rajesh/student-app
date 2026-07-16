@@ -1,5 +1,5 @@
 class Api::V1::StudentsController < Api::V1::BaseController
-  before_action :set_student, only: [ :show, :update, :destroy ]
+  before_action :set_student, only: [ :show, :update, :destroy, :report_card ]
 
   def index
     students = students_scope.apply_filter(params)
@@ -22,6 +22,7 @@ class Api::V1::StudentsController < Api::V1::BaseController
         current_user.students.build(student_params)
       end
     if student.save
+      NotificationMailer.student_created(student).deliver_later
       render json: student, status: :created
     else
       render_validation_error(student)
@@ -29,7 +30,18 @@ class Api::V1::StudentsController < Api::V1::BaseController
   end
 
   def update
+    documents_uploaded = params.dig(:student, :documents).present?
     if @student.update(student_params)
+      if @student.saved_change_to_user_id? && @student.user.present?
+        NotificationMailer.teacher_assigned(@student).deliver_later
+        NotificationMailer.student_assigned(@student).deliver_later
+      end
+      if documents_uploaded
+        NotificationMailer.documents_uploaded(@student).deliver_later
+      end
+      if @student.saved_change_to_marks?
+        NotificationMailer.marks_posted(@student).deliver_later
+      end
       render json: @student
     else
       render_validation_error(@student)
@@ -41,6 +53,18 @@ class Api::V1::StudentsController < Api::V1::BaseController
     head :no_content
   end
 
+  def report_card
+    pdf = ReportCardPdf.new(@student).render
+    NotificationMailer
+      .report_card(@student)
+      .deliver_later
+    send_data(
+      pdf,
+      filename: "ReportCard.pdf",
+      type: "application/pdf",
+      disposition: "attachment"
+    )
+  end
 
   private
     def set_student
