@@ -38,25 +38,13 @@ class StudentsController < ApplicationController
       NotificationMailer.student_created(@student).deliver_later
       flash.now[:notice] = "Student created successfully."
       respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.append("students", @student),
-            turbo_stream.update("flash", partial: "students/flash"),
-            turbo_stream.replace("student_form", html: '<turbo-frame id="student_form"></turbo-frame>')
-          ]
-        end
-        format.html do
-          redirect_to students_path, notice: "Student created successfully."
-        end
+        format.turbo_stream
+        format.html { redirect_to students_path, notice: "Student created successfully." }
       end
     else
       respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
-        end
-        format.html do
-          render :new, status: :unprocessable_entity
-        end
+        format.turbo_stream { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -124,6 +112,10 @@ class StudentsController < ApplicationController
     redirect_to @student, notice: "Document removed successfully"
   end
 
+  def cancel
+    @student = Student.find(params[:id])
+    render partial: "student", locals: { student: @student }
+  end
   private
     def set_student
     @student =
