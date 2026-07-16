@@ -116,6 +116,7 @@ class StudentsController < ApplicationController
     @student = Student.find(params[:id])
     render partial: "student", locals: { student: @student }
   end
+  
   private
     def set_student
     @student =

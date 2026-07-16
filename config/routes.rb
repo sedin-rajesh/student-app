@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     member do
       delete :remove_profile_photo
       delete "documents/:attachment_id", action: :remove_document, as: :remove_document
+      get :cancel
     end
   end
 
