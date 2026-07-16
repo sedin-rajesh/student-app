@@ -55,6 +55,7 @@ class StudentsController < ApplicationController
   def update
     documents_uploaded = Array(params.dig(:student, :documents)).reject(&:blank?).any?
     if @student.update(student_params)
+      flash.now[:notice] = "Student updated successfully"
       if @student.saved_change_to_user_id? && @student.user.present?
         NotificationMailer.teacher_assigned(@student).deliver_later
         NotificationMailer.student_assigned(@student).deliver_later
@@ -67,21 +68,12 @@ class StudentsController < ApplicationController
       end
       respond_to do |format|
         format.html { redirect_to students_path, notice: "Student updated successfully" }
-        format.turbo_stream do
-          flash.now[:notice] = "Student updated successfully."
-          render turbo_stream: [
-            turbo_stream.replace(helpers.dom_id(@student), partial: "students/student", locals: { student: @student }),
-            turbo_stream.update("flash", partial: "students/flash")
-          ]
-        end
+        format.turbo_stream
       end
-      redirect_to @student, notice: "Student updated successfully"
     else
       respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(helpers.dom_id(@student), template: "students/edit"), status: :unprocessable_entity
-        end
+        format.turbo_stream { render :edit, status: :unprocessable_entity }
       end
     end
   end
@@ -116,7 +108,7 @@ class StudentsController < ApplicationController
     @student = Student.find(params[:id])
     render partial: "student", locals: { student: @student }
   end
-  
+
   private
     def set_student
     @student =
