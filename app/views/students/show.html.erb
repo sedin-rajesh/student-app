@@ -25,6 +25,6 @@
         <% end %>
     </div>
     <div>
-        <%= link_to "Back", students_path(search: params[:search], course: params[:course]) %>
+        <%= link_to "Back", students_path(search: params[:search], course: params[:course]), onclick: "if (window.history.length > 1) { window.history.back(); return false; }" %>
     </div>
 </div>
