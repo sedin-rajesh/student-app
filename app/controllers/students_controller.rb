@@ -87,6 +87,7 @@ class StudentsController < ApplicationController
           ]
         end
       end
+      redirect_to @student, notice: "Student updated successfully"
     else
       respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
@@ -109,8 +110,12 @@ class StudentsController < ApplicationController
   end
 
   def remove_profile_photo
-    @student.profile_photo.purge
-    redirect_to students_path, notice: "Profile photo removed successfully"
+    if @student.profile_photo.attached?
+      @student.profile_photo.purge
+      redirect_to @student, notice: "Profile photo removed successfully"
+    else
+      redirect_to @student, alert: "No profile photo to remove"
+    end
   end
 
   def remove_document

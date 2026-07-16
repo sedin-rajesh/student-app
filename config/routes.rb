@@ -11,9 +11,10 @@ Rails.application.routes.draw do
   resources :students do
     member do
       delete :remove_profile_photo
-      delete :remove_document
+      delete "documents/:attachment_id", action: :remove_document, as: :remove_document
     end
   end
+
   resources :users, only: [ :index ]
   namespace :api do
     namespace :v1 do
@@ -21,11 +22,7 @@ Rails.application.routes.draw do
         post "login", to: "sessions#create"
         delete "logout", to: "sessions#destroy"
       end
-      resources :students do
-        member do
-          get :report_card
-        end
-      end
+      resources :students
       resources :users do
         collection do
           get :teachers_by_subject

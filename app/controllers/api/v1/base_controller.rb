@@ -24,6 +24,7 @@ module Api
         }
       }, status: :bad_request
       end
+      
       def render_validation_error(record)
         render json: {
           errors: record.errors.full_messages

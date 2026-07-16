@@ -32,7 +32,6 @@ class Api::V1::StudentsController < Api::V1::BaseController
   def update
     documents_uploaded = params.dig(:student, :documents).present?
     if @student.update(student_params)
-      render json: @student
       if @student.saved_change_to_user_id? && @student.user.present?
         NotificationMailer.teacher_assigned(@student).deliver_later
         NotificationMailer.student_assigned(@student).deliver_later
@@ -43,6 +42,7 @@ class Api::V1::StudentsController < Api::V1::BaseController
       if @student.saved_change_to_marks?
         NotificationMailer.marks_posted(@student).deliver_later
       end
+      render json: @student
     else
       render_validation_error(@student)
     end
