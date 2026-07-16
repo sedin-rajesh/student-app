@@ -1,10 +1,10 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :remove_profile_photo, :remove_document ]
   def index
     if current_user.admin?
       @students = Student.all
     else
-      @students=current_user.students
+      @students = current_user.students
     end
     @students = @students.search(params[:search])
 
@@ -14,7 +14,7 @@ class StudentsController < ApplicationController
   end
 
   def new
-    @student=Student.new
+    @student = Student.new
   end
 
   def show
@@ -30,12 +30,12 @@ class StudentsController < ApplicationController
   end
 
   def create
-    @student=Student.new(student_params)
+    @student = Student.new(student_params)
     if current_user.teacher?
-      @student.user=current_user
+      @student.user = current_user
     end
     if @student.save
-      NotificationMailer.student_created(@student).deliver_now
+      NotificationMailer.student_created(@student).deliver_later
       flash.now[:notice] = "Student created successfully."
       respond_to do |format|
         format.turbo_stream do
@@ -68,14 +68,14 @@ class StudentsController < ApplicationController
     documents_uploaded = Array(params.dig(:student, :documents)).reject(&:blank?).any?
     if @student.update(student_params)
       if @student.saved_change_to_user_id? && @student.user.present?
-        NotificationMailer.teacher_assigned(@student).deliver_now
-        NotificationMailer.student_assigned(@student).deliver_now
+        NotificationMailer.teacher_assigned(@student).deliver_later
+        NotificationMailer.student_assigned(@student).deliver_later
       end
       if documents_uploaded
-        NotificationMailer.documents_uploaded(@student).deliver_now
+        NotificationMailer.documents_uploaded(@student).deliver_later
       end
       if @student.saved_change_to_marks?
-        NotificationMailer.marks_posted(@student).deliver_now
+        NotificationMailer.marks_posted(@student).deliver_later
       end
       respond_to do |format|
         format.html { redirect_to students_path, notice: "Student updated successfully" }
@@ -116,7 +116,7 @@ class StudentsController < ApplicationController
   def remove_document
     document = @student.documents.find(params[:attachment_id])
     document.purge
-    redirect_to @student
+    redirect_to @student, notice: "Document removed successfully"
   end
 
   private
@@ -129,7 +129,6 @@ class StudentsController < ApplicationController
       end
     end
 
-  private
     def student_params
       permitted = [ :name, :email, :age, :course, :city, :marks, :profile_photo, documents: [] ]
       permitted << :user_id if current_user.admin?
