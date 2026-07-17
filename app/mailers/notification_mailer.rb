@@ -49,7 +49,7 @@ class NotificationMailer < ApplicationMailer
     attachments["report_card.pdf"] = pdf
     mail(
       to: @student.email,
-      subject: "Your report card"
+      subject: "Your Report Card is Ready"
     )
   end
 end

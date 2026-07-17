@@ -109,20 +109,16 @@ class StudentsController < ApplicationController
   end
 
   def cancel
-    @student = Student.find(params[:id])
-    render partial: "student", locals: { student: @student }
-  end
-
-  def cancel
-    @student = Student.find(params[:id])
     render partial: "student", locals: { student: @student }
   end
 
   def generate_report_card
-    @student = Student.find(params[:id])
+    unless current_user.admin?
+      redirect_to students_path, alert: "You are not authorized to generate this report card."
+      return
+    end
     GenerateReportCardJob.perform_later(@student.id)
     redirect_to @student, notice: "Report card generation has been queued. You will receive an email once it's ready."
-    NotificationMailer.report_card(@student).deliver_later
   end
   private
     def set_student
