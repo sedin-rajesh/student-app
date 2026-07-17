@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy, :generate_report_card, :remove_profile_photo, :remove_document ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :generate_report_card, :remove_profile_photo, :remove_document, :cancel ]
   def index
     if current_user.admin?
       @students = Student.all
@@ -119,6 +119,11 @@ class StudentsController < ApplicationController
     redirect_to @student
   end
 
+  def cancel
+    @student = Student.find(params[:id])
+    render partial: "student", locals: { student: @student }
+  end
+  
   def generate_report_card
     @student = Student.find(params[:id])
     GenerateReportCardJob.perform_later(@student.id)
