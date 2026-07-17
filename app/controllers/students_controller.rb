@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy, :generate_report_card ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :generate_report_card, :remove_profile_photo, :remove_document ]
   def index
     if current_user.admin?
       @students = Student.all
