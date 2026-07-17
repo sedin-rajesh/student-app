@@ -1,6 +1,11 @@
 <div class="show">
     <% if @student.profile_photo.attached? %>
         <%= image_tag @student.profile_photo, width: 150 %>
+        <%= button_to "Remove Profile Photo", remove_profile_photo_student_path(@student),
+        method: :delete,
+        data: { turbo_confirm: "Are you sure you want to remove the profile photo?" },
+        class: "remove-profile-photo-button"
+        %>
     <% end %>
     <h2><%= @student.name%></h2>
     <div class="show-student">

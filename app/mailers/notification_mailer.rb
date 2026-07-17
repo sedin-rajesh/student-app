@@ -3,7 +3,7 @@ class NotificationMailer < ApplicationMailer
     @student = student
     mail(
       to: @student.email,
-      subject: "Your student profile has been created"
+      subject: "Welcome to ABC Academy"
     )
   end
 

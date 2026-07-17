@@ -1,7 +1,6 @@
 <div class="form">
-    <h2>Add Student</h2>
     <div class="form-content">
-        <%= form_with model: @student, data:{
+        <%= form_with model: student, data:{
             controller: "student-form",
             student_form_max_length_value:50
         } do |form|%>
@@ -53,7 +52,8 @@
                         User.teacher,
                         :id,
                         :email,
-                        prompt: "Select Teacher" %>
+                        prompt: "Select Teacher",
+                        required: true %>
                 </div>
             <% end %>
             <%= form.label :documents %>

@@ -2,6 +2,6 @@
   <div class="edit student-card">
     <h2>✍️Edit Student</h2>
     <%= render "form", student: @student %>
-    <%= link_to "Cancel", student_path(@student, search: params[:search], course: params[:course]), class: "cancel-button" %>
+    <%= link_to "Cancel", cancel_student_path(@student, search: params[:search], course: params[:course]), class: "cancel-button" %>
   </div>
 <% end %>

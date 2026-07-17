@@ -9,6 +9,16 @@ module Api
       def respond_with(resource, _opts = {})
         token = request.env["warden-jwt_auth.token"]
 
+        unless token.present?
+          Rails.logger.error(
+            "JWT token missing after successful authentication for user #{resource.id}"
+          )
+          render json: {
+            error: "Authentication token could not be generated"
+          }, status: :internal_server_error
+
+          return
+        end
         render json: {
           token: token,
           user: {

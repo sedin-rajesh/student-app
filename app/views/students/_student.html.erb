@@ -3,7 +3,7 @@
     <p>Name: <%= student.name %></p>
 
     <div class="actions">
-      <%= link_to "View", student_path(student, search: params[:search], course: params[:course]), data: { turbo: "false" } %>
+      <%= link_to "View", student_path(student, search: params[:search], course: params[:course]), data: { turbo_frame: "_top" } %>
 
       <%= link_to "Edit", edit_student_path(student, search: params[:search], course: params[:course]) %>
 

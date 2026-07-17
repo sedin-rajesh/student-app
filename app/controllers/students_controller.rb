@@ -4,7 +4,7 @@ class StudentsController < ApplicationController
     if current_user.admin?
       @students = Student.all
     else
-      @students=current_user.students
+      @students = current_user.students
     end
     @students = @students.search(params[:search])
 
@@ -14,7 +14,7 @@ class StudentsController < ApplicationController
   end
 
   def new
-    @student=Student.new
+    @student = Student.new
   end
 
   def show
@@ -30,33 +30,23 @@ class StudentsController < ApplicationController
   end
 
   def create
-    @student=Student.new(student_params)
+    @student = Student.new(student_params)
     if current_user.teacher?
-      @student.user=current_user
+      @student.user = current_user
     end
     if @student.save
       NotificationMailer.student_created(@student).deliver_later
       flash.now[:notice] = "Student created successfully."
       respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.append("students", @student),
-            turbo_stream.update("flash", partial: "students/flash"),
-            turbo_stream.replace("student_form", html: '<turbo-frame id="student_form"></turbo-frame>')
-          ]
-        end
-        format.html do
-          redirect_to students_path, notice: "Student created successfully."
-        end
+        format.turbo_stream
+        format.html { redirect_to students_path, notice: "Student created successfully." }
       end
     else
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
         end
-        format.html do
-          render :new, status: :unprocessable_entity
-        end
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -67,6 +57,7 @@ class StudentsController < ApplicationController
   def update
     documents_uploaded = Array(params.dig(:student, :documents)).reject(&:blank?).any?
     if @student.update(student_params)
+      flash.now[:notice] = "Student updated successfully"
       if @student.saved_change_to_user_id? && @student.user.present?
         NotificationMailer.teacher_assigned(@student).deliver_later
         NotificationMailer.student_assigned(@student).deliver_later
@@ -79,13 +70,7 @@ class StudentsController < ApplicationController
       end
       respond_to do |format|
         format.html { redirect_to students_path, notice: "Student updated successfully" }
-        format.turbo_stream do
-          flash.now[:notice] = "Student updated successfully."
-          render turbo_stream: [
-            turbo_stream.replace(helpers.dom_id(@student), partial: "students/student", locals: { student: @student }),
-            turbo_stream.update("flash", partial: "students/flash")
-          ]
-        end
+        format.turbo_stream
       end
     else
       respond_to do |format|
@@ -109,14 +94,23 @@ class StudentsController < ApplicationController
   end
 
   def remove_profile_photo
-    @student.profile_photo.purge
-    redirect_to students_path, notice: "Profile photo removed successfully"
+    if @student.profile_photo.attached?
+      @student.profile_photo.purge
+      redirect_to @student, notice: "Profile photo removed successfully"
+    else
+      redirect_to @student, alert: "No profile photo to remove"
+    end
   end
 
   def remove_document
     document = @student.documents.find(params[:attachment_id])
     document.purge
-    redirect_to @student
+    redirect_to @student, notice: "Document removed successfully"
+  end
+
+  def cancel
+    @student = Student.find(params[:id])
+    render partial: "student", locals: { student: @student }
   end
 
   def cancel
@@ -140,7 +134,6 @@ class StudentsController < ApplicationController
       end
     end
 
-  private
     def student_params
       permitted = [ :name, :email, :age, :course, :city, :marks, :profile_photo, documents: [] ]
       permitted << :user_id if current_user.admin?
