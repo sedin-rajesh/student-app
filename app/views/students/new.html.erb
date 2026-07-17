@@ -1,5 +1,6 @@
-<div class="add-student">
-    <h2>📝Add Student</h2>
-    <%=render "form", student: @student%>
-    <%=link_to "Cancel", students_path%>
-</div>
+<%= turbo_frame_tag "student_form" do %>
+  <div class="add-student">
+    <h2>📝 Add Student</h2>
+    <%= render "form", student: @student %>
+  </div>
+<% end %>

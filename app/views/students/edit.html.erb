@@ -1,5 +1,7 @@
-<div class="edit">
+<%= turbo_frame_tag dom_id(@student) do %>
+  <div class="edit student-card">
     <h2>✍️Edit Student</h2>
-    <%=render "form", student: @student%>
-    <%=link_to "Cancel", students_path%>
-</div>
+    <%= render "form", student: @student %>
+    <%= link_to "Cancel", cancel_student_path(@student, search: params[:search], course: params[:course]), class: "cancel-button" %>
+  </div>
+<% end %>

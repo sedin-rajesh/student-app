@@ -1,0 +1,7 @@
+<%= turbo_stream.replace dom_id(@student) do %>
+  <%= render @student %>
+<% end %>
+
+<%= turbo_stream.update "flash" do %>
+  <%= render "students/flash" %>
+<% end %>

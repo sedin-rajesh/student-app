@@ -1,37 +1,66 @@
 <div class="student">
     <h1> Students </h1>
+    <h3 id="students_count">
+        Total Students: <%= Student.count %>
+    </h3>
+    <div id="flash">
+        <%= render "flash" %>
+    </div>
+    <div data-controller="modal" data-action="turbo:submit-end->modal#closeOnSuccess">
+
     <div class="filter">
-            <%= form_with url: students_path, method: :get, local: true do |form| %>
+            <%= form_with url: students_path, method: :get, data:{
+                turbo_frame: "students_list"
+            } do |form| %>
                 <div class="search-input">
                     <%= form.text_field :search,
                         value: params[:search],
-                        placeholder: "Search by name or email" %>
+                        placeholder: "Search by name or email",
+                        oninput: "this.form.requestSubmit()" %>
                 </div>
                 <div class="search-filter">
                     <%= form.select :course,
                         ["Ruby", "Rails", "React", "Java"],
                         { include_blank: "All Courses" },
-                        { selected: params[:course] } %>
+                        {
+                            selected: params[:course],
+                            onchange: "this.form.requestSubmit()"
+                        } %>
                 </div>
                 <div class="filter-button">
                     <%= form.submit "Filter" %>
                 </div>
             <% end %>
-        </div>
-    <div id="student">
-        <% @students.each do |student| %>
-            <div class="student-card">
-                <p>Name: <%= student.name %></p>
+            <%= link_to "Add Student",
+                new_student_path,
+                data: {
+                    turbo_frame: "student_form",
+                    action: "click->modal#open"
+                },
+                class: "add-student-button" %>
 
-                <div class="actions">
-                <%= link_to "View", student_path(student) %>
-                <%= link_to "Edit", edit_student_path(student) %>
-                <%= button_to "Delete",
-                    student_path(student),
-                    method: :delete,
-                    data: { turbo_confirm: "Are you sure?" } %>
-                </div>
+            <div
+            class="modal"
+            data-modal-target="modal"
+            data-action="click->modal#closeOnBackground"
+            hidden
+            >
+            <div class="modal-content">
+                <button
+                type="button"
+                class="modal-close"
+                data-action="click->modal#close"
+                >
+                ×
+                </button>
+
+                <%= turbo_frame_tag "student_form" %>
             </div>
+            </div>
+  </div>
+        </div>
+            <%= turbo_frame_tag "students_list" do %> <div id="students"> <%= render @students %> 
+        </div> 
         <% end %>
     </div>
 </div>

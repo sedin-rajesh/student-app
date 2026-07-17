@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy, :remove_profile_photo, :remove_document ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :remove_profile_photo, :remove_document, :cancel ]
   def index
     if current_user.admin?
       @students = Student.all
@@ -18,6 +18,15 @@ class StudentsController < ApplicationController
   end
 
   def show
+    respond_to do |format|
+      format.html do
+        if turbo_frame_request?
+          render partial: "student", locals: { student: @student }
+        else
+          render :show
+        end
+      end
+    end
   end
 
   def create
@@ -27,9 +36,18 @@ class StudentsController < ApplicationController
     end
     if @student.save
       NotificationMailer.student_created(@student).deliver_later
-      redirect_to students_path, notice: "Student created successfully."
+      flash.now[:notice] = "Student created successfully."
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to students_path, notice: "Student created successfully." }
+      end
     else
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
+        end
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -37,8 +55,9 @@ class StudentsController < ApplicationController
   end
 
   def update
-    documents_uploaded = params.dig(:student, :documents).present?
+    documents_uploaded = Array(params.dig(:student, :documents)).reject(&:blank?).any?
     if @student.update(student_params)
+      flash.now[:notice] = "Student updated successfully"
       if @student.saved_change_to_user_id? && @student.user.present?
         NotificationMailer.teacher_assigned(@student).deliver_later
         NotificationMailer.student_assigned(@student).deliver_later
@@ -49,15 +68,29 @@ class StudentsController < ApplicationController
       if @student.saved_change_to_marks?
         NotificationMailer.marks_posted(@student).deliver_later
       end
-      redirect_to @student, notice: "Student updated successfully"
+      respond_to do |format|
+        format.html { redirect_to students_path, notice: "Student updated successfully" }
+        format.turbo_stream
+      end
     else
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(helpers.dom_id(@student), template: "students/edit"), status: :unprocessable_entity
+        end
+      end
     end
   end
 
   def destroy
     @student.destroy
-    redirect_to students_path, notice: "Student deleted successfully"
+    flash.now[:notice] = "Student deleted successfully."
+    respond_to do |format|
+      format.html do
+        redirect_to students_path, notice: "Student deleted successfully"
+      end
+      format.turbo_stream
+    end
   end
 
   def remove_profile_photo
@@ -73,6 +106,11 @@ class StudentsController < ApplicationController
     document = @student.documents.find(params[:attachment_id])
     document.purge
     redirect_to @student, notice: "Document removed successfully"
+  end
+
+  def cancel
+    @student = Student.find(params[:id])
+    render partial: "student", locals: { student: @student }
   end
 
   private
