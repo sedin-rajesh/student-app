@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy, :remove_profile_photo, :remove_document ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :remove_profile_photo, :remove_document, :cancel ]
   def index
     if current_user.admin?
       @students = Student.all
@@ -43,7 +43,9 @@ class StudentsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.turbo_stream { render :new, status: :unprocessable_entity }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
+        end
         format.html { render :new, status: :unprocessable_entity }
       end
     end
@@ -73,7 +75,9 @@ class StudentsController < ApplicationController
     else
       respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(helpers.dom_id(@student), template: "students/edit"), status: :unprocessable_entity
+        end
       end
     end
   end
