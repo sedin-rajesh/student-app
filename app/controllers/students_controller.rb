@@ -117,7 +117,7 @@ class StudentsController < ApplicationController
     @student = Student.find(params[:id])
     render partial: "student", locals: { student: @student }
   end
-  
+
   def generate_report_card
     @student = Student.find(params[:id])
     GenerateReportCardJob.perform_later(@student.id)
