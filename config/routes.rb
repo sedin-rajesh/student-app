@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :students do
     member do
       delete :remove_profile_photo
+      post :generate_report_card
       delete "documents/:attachment_id", action: :remove_document, as: :remove_document
       get :cancel
     end

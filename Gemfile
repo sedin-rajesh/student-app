@@ -53,6 +53,8 @@ gem "devise-jwt"
 
 gem "prawn"
 
+gem "sidekiq"
+
 group :development, :test do
   # Debugging
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -65,6 +67,9 @@ group :development, :test do
 
   # Rails style guide and RuboCop configuration
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails"
+  gem "factory_bot_rails"
 end
 
 group :development do
@@ -83,4 +88,6 @@ group :test do
   # System testing
   gem "capybara"
   gem "selenium-webdriver"
+  gem "simplecov", require: false
+  gem "shoulda-matchers"
 end

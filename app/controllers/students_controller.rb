@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [ :show, :edit, :update, :destroy, :remove_profile_photo, :remove_document, :cancel ]
+  before_action :set_student, only: [ :show, :edit, :update, :destroy, :generate_report_card, :remove_profile_photo, :remove_document, :cancel ]
   def index
     if current_user.admin?
       @students = Student.all
@@ -109,10 +109,17 @@ class StudentsController < ApplicationController
   end
 
   def cancel
-    @student = Student.find(params[:id])
     render partial: "student", locals: { student: @student }
   end
 
+  def generate_report_card
+    unless current_user.admin?
+      redirect_to students_path, alert: "You are not authorized to generate this report card."
+      return
+    end
+    GenerateReportCardJob.perform_later(@student.id)
+    redirect_to @student, notice: "Report card generation has been queued. You will receive an email once it's ready."
+  end
   private
     def set_student
     @student =

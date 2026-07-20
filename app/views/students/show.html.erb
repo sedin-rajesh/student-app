@@ -24,7 +24,28 @@
             <%= link_to "Download", rails_blob_path(document, disposition: "attachment") %>
         <% end %>
     </div>
+    <% if current_user.admin? %>
+        <div class="report-card">
+            <%= button_to "Generate Report Card",
+                generate_report_card_student_path(@student),
+                method: :post,
+                class: "btn" %>
+        </div>
+    <% end %>
     <div>
         <%= link_to "Back", students_path(search: params[:search], course: params[:course]) %>
+    </div>
+    <% if @student.report_card.attached? %>
+        <div class="generated-report">
+            <h3>Generated Report</h3>
+
+            <%= link_to "Download Report Card",
+                        rails_blob_path(
+                        @student.report_card,
+                        disposition: "attachment"
+                        ),
+                        class: "btn" %>
+        </div>
+    <% end %>   
     </div>
 </div>
