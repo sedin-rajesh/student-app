@@ -1,0 +1,11 @@
+.git
+.gitignore
+log/*
+tmp/*
+storage/*
+coverage
+.env
+.env.*
+config/master.key
+node_modules
+vendor/bundle
