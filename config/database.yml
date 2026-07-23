@@ -19,4 +19,9 @@ production:
   cable:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
-    migrations_paths: db/cable_migrate
+    schema_dump: cable_schema
+
+  queue:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+    schema_dump: queue_schema
