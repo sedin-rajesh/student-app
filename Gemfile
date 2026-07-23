@@ -49,6 +49,14 @@ gem "image_processing", "~> 1.2"
 
 gem "devise"
 
+gem "devise-jwt"
+
+gem "jwt"
+
+gem "prawn"
+
+gem "sidekiq"
+
 group :development, :test do
   # Debugging
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -61,6 +69,9 @@ group :development, :test do
 
   # Rails style guide and RuboCop configuration
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails"
+  gem "factory_bot_rails"
 end
 
 group :development do
@@ -71,10 +82,14 @@ group :development do
   gem "bullet"
 
   gem "letter_opener"
+
+  gem "letter_opener_web", "~> 3.0"
 end
 
 group :test do
   # System testing
   gem "capybara"
   gem "selenium-webdriver"
+  gem "simplecov", require: false
+  gem "shoulda-matchers"
 end

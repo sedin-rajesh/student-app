@@ -1,7 +1,38 @@
 Rails.application.routes.draw do
+  # mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   devise_for :users
-  root "dashboard#dashboard"
-  get "dashboard", to: "dashboard#dashboard"
-  resources :students
+  authenticated :user do
+    root "dashboard#index", as: :authenticated_root
+  end
+  unauthenticated do
+    root to: redirect("/users/sign_in")
+  end
+  get "dashboard", to: "dashboard#index"
+  resources :students do
+    member do
+      delete :remove_profile_photo
+      post :generate_report_card
+      delete "documents/:attachment_id", action: :remove_document, as: :remove_document
+      get :cancel
+    end
+  end
+
   resources :users, only: [ :index ]
+  namespace :api do
+    namespace :v1 do
+      devise_scope :user do
+        post "login", to: "sessions#create"
+        delete "logout", to: "sessions#destroy"
+      end
+      resources :students
+      resources :users do
+        collection do
+          get :teachers_by_subject
+        end
+      end
+      resources :teachers, only: [] do
+        resources :students, only: [ :index, :create ]
+      end
+    end
+  end
 end
