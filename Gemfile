@@ -57,6 +57,8 @@ gem "prawn"
 
 gem "sidekiq"
 
+gem "resend"
+
 group :development, :test do
   # Debugging
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
