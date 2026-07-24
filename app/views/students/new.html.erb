@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "student_form" do %>
   <div class="add-student">
     <h2>📝 Add Student</h2>
-    <%= render "form", student: @student %>
+    <%= render "form", student: @student, modal: turbo_frame_request? %>
   </div>
 <% end %>

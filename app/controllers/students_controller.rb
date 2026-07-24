@@ -36,17 +36,25 @@ class StudentsController < ApplicationController
     end
     if @student.save
       NotificationMailer.student_created(@student).deliver_later
-      flash.now[:notice] = "Student created successfully."
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to students_path, notice: "Student created successfully." }
+      if params[:from_modal] == "true"
+        flash.now[:notice] = "Student created successfully."
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to students_path, notice: "Student created successfully.", status: :see_other }
+        end
+      else
+        redirect_to students_path, notice: "Student created successfully", status: :see_other
       end
     else
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
+      if params[:from_modal] == "true"
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
         end
         format.html { render :new, status: :unprocessable_entity }
+      end
+      else
+        render :new, status: :unprocessable_entity
       end
     end
   end
