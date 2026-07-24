@@ -1,6 +1,20 @@
-<%= turbo_frame_tag "student_form" do %>
+<% if turbo_frame_request? %>
+  <%# ===== MODAL VERSION ===== %>
+  <%= turbo_frame_tag "student_form" do %>
+    <div class="add-student">
+      <h2>📝 Add Student</h2>
+      <%= render "form",
+            student: @student,
+            modal: true %>
+    </div>
+  <% end %>
+
+<% else %>
+  <%# ===== NORMAL PAGE VERSION ===== %>
   <div class="add-student">
     <h2>📝 Add Student</h2>
-    <%= render "form", student: @student %>
+    <%= render "form",
+          student: @student,
+          modal: false %>
   </div>
 <% end %>

@@ -6,8 +6,8 @@ gem "rails", "~> 8.1.3"
 # The modern asset pipeline for Rails
 gem "propshaft"
 
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.1"
+# Use postgres as the database for Active Record
+gem "pg", "~> 1.5"
 
 # Use the Puma web server
 gem "puma", ">= 5.0"
@@ -51,9 +51,13 @@ gem "devise"
 
 gem "devise-jwt"
 
+gem "jwt"
+
 gem "prawn"
 
 gem "sidekiq"
+
+gem "resend"
 
 group :development, :test do
   # Debugging
