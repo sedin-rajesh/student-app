@@ -1,3 +1,4 @@
+<% modal = params[:from_modal] == "true" || turbo_frame_request? %>
 <%= turbo_frame_tag "student_form" do %>
   <div class="add-student">
     <h2>📝 Add Student</h2>
