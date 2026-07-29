@@ -139,8 +139,11 @@ class StudentsController < ApplicationController
     end
 
     def student_params
-      permitted = [ :name, :email, :age, :course, :city, :marks, :profile_photo, documents: [] ]
-      permitted << :user_id if current_user.admin?
-      params.expect(student: permitted)
+      permitted = params.expect( student: [ :name, :email, :age, :course, :city, :marks, :profile_photo, { documents: [] }, *(current_user.admin? ? [ :user_id ] : []) ])
+      if permitted[:documents].present?
+        permitted[:documents].reject!(&:blank?)
+        permitted.delete(:documents) if permitted[:documents].empty?
+      end
+      permitted
     end
 end

@@ -1,7 +1,10 @@
 <%= turbo_frame_tag dom_id(student) do %>
   <div class="student-card">
     <p>Name: <%= student.name %></p>
-
+    <div class="mini-details">
+      <p>Email: <%= student.email %></p>
+      <p>Course: <%= student.course %></p>
+    </div>
     <div class="actions">
       <%= link_to "View", student_path(student, search: params[:search], course: params[:course]), data: { turbo_frame: "_top" } %>
 

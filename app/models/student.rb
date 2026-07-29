@@ -6,7 +6,7 @@ class Student < ApplicationRecord
     COURSES = %w[Ruby Rails React Java].freeze
     validate :validate_profile_photo
     validate :validate_documents
-    validates :name, presence: true
+    validates :name, presence: true, format: { with: /\A[a-zA-Z ]+\z/ }
     validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
     validates :age, presence: true, numericality: { only_integer: true, greater_than: 0 }
     validates :course, presence: true
@@ -17,7 +17,7 @@ class Student < ApplicationRecord
       return all if term.blank?
       search_term = "%#{sanitize_sql_like(term)}%"
       where(
-        "name LIKE :search or email LIKE :search", search: search_term
+        "name ILIKE :search or email ILIKE :search", search: search_term
       )
     }
 
