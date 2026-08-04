@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :student do
-    sequence(:name)  { |n| "Student #{n}" }
+    sequence(:name)  { |n| "Student #{('A'..'ZZZ').to_a[n]}" }
     sequence(:email) { |n| "student#{n}@example.com" }
     age    { 20 }
     course { "Ruby" }

@@ -43,7 +43,7 @@ class StudentsController < ApplicationController
           format.html { redirect_to students_path, notice: "Student created successfully.", status: :see_other }
         end
       else
-        redirect_to students_path, notice: "Student created successfully", status: :see_other
+        redirect_to students_path, notice: "Student created successfully.", status: :see_other
       end
     else
       if params[:from_modal] == "true"
@@ -104,7 +104,7 @@ class StudentsController < ApplicationController
   def remove_profile_photo
     if @student.profile_photo.attached?
       @student.profile_photo.purge
-      redirect_to @student, notice: "Profile photo removed successfully"
+      redirect_to students_path, notice: "Profile photo removed successfully"
     else
       redirect_to @student, alert: "No profile photo to remove"
     end
@@ -121,10 +121,6 @@ class StudentsController < ApplicationController
   end
 
   def generate_report_card
-    unless current_user.admin?
-      redirect_to students_path, alert: "You are not authorized to generate this report card."
-      return
-    end
     GenerateReportCardJob.perform_later(@student.id)
     redirect_to @student, notice: "Report card generation has been queued. You will receive an email once it's ready."
   end
@@ -139,7 +135,7 @@ class StudentsController < ApplicationController
     end
 
     def student_params
-      permitted = params.expect( student: [ :name, :email, :age, :course, :city, :marks, :profile_photo, { documents: [] }, *(current_user.admin? ? [ :user_id ] : []) ])
+      permitted = params.expect( student: [ :name, :email, :age, :course, :city, :marks, :grade, :profile_photo, { documents: [] }, *(current_user.admin? ? [ :user_id ] : []) ])
       if permitted[:documents].present?
         permitted[:documents].reject!(&:blank?)
         permitted.delete(:documents) if permitted[:documents].empty?

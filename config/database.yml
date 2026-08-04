@@ -10,6 +10,9 @@ development:
 test:
   <<: *default
   database: student_management_test
+  username: postgres
+  password: rajesh
+  host: localhost
 
 production:
   primary:

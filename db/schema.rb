@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_083910) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_04_093501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -48,6 +48,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_083910) do
     t.string "course"
     t.datetime "created_at", null: false
     t.string "email"
+    t.string "grade"
     t.integer "marks"
     t.string "name"
     t.datetime "updated_at", null: false
@@ -64,6 +65,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_083910) do
     t.string "reset_password_token"
     t.integer "role", default: 1, null: false
     t.integer "students_count", default: 0, null: false
+    t.string "subject"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

@@ -54,7 +54,8 @@ class Api::V1::UsersController < Api::V1::BaseController
       :email,
       :password,
       :password_confirmation,
-      :role
+      :role,
+      :subject
     )
   end
 
