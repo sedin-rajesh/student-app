@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :users, only: [ :index ]
   namespace :api do
     namespace :v1 do
+      get :teachers, to: "users#teachers"
       devise_scope :user do
         post "login", to: "sessions#create"
         delete "logout", to: "sessions#destroy"
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
       resources :students
       resources :users do
         collection do
+          get :teachers
           get :teachers_by_subject
         end
       end
