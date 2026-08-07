@@ -24,7 +24,7 @@ RSpec.describe GenerateReportCardJob, type: :job do
 
     it "attaches a file named report_card.pdf" do
       described_class.new.perform(student.id)
-      expect(student.reload.report_card.filename.to_s).to eq("report_card.pdf")
+      expect(student.reload.report_card.filename.to_s).to eq("report_card_#{student.id}.pdf")
     end
 
     it "attaches a PDF content type" do

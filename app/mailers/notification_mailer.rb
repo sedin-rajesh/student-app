@@ -46,7 +46,7 @@ class NotificationMailer < ApplicationMailer
   def report_card(student)
     @student = student
     pdf = ReportCardPdf.new(@student).render
-    attachments["report_card.pdf"] = pdf
+    attachments["report_card_#{@student.id}.pdf"] = pdf
     mail(
       to: @student.email,
       subject: "Your Report Card is Ready"

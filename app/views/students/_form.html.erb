@@ -4,11 +4,12 @@
             controller: "student-form",
             student_form_max_length_value:50
         } do |form|%>
-            <%= form.label :profile_photo %>
-            <%= form.file_field :profile_photo, accept: "image/png,image/jpeg,image/jpg" %>
+            <%= hidden_field_tag :from_modal, modal %>
             <% if form.object.errors.any? %>
                 <h2 class="error"><%= form.object.errors.full_messages.first %></h2>
             <% end %>
+            <%= form.label :profile_photo %>
+            <%= form.file_field :profile_photo, accept: "image/png,image/jpeg,image/jpg" %>
 
             <div>
                 <%=form.label :name%>

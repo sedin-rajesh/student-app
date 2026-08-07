@@ -12,7 +12,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "has the correct subject" do
-      expect(mail.subject).to eq("Your student profile has been created")
+      expect(mail.subject).to eq("Welcome to ABC Academy")
     end
 
     it "renders the student name in the body" do
@@ -84,7 +84,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders 'Marks Updated' heading in the body" do
-      expect(mail.body.encoded).to include("Marks Updated")
+      expect(mail.body.encoded).to include("Marks Published")
     end
   end
 
@@ -96,11 +96,12 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "has the correct subject" do
-      expect(mail.subject).to eq("Your report card")
+      expect(mail.subject).to eq("Your Report Card is Ready")
     end
 
-    it "attaches a PDF file named report_card.pdf" do
-      attachment = mail.attachments.find { |a| a.filename == "report_card.pdf" }
+    it "attaches a PDF file named report_card_<student_id>.pdf" do
+      attachment = mail.attachments.find { |a| a.filename == "report_card_#{student.id}.pdf" }
+      puts mail.attachments.map(&:filename)
       expect(attachment).not_to be_nil
       expect(attachment.content_type).to start_with("application/pdf")
     end

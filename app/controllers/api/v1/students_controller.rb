@@ -77,7 +77,7 @@ class Api::V1::StudentsController < Api::V1::BaseController
     end
 
     def student_params
-      permitted = [ :name, :email, :age, :course, :city, :marks ]
+      permitted = [ :name, :email, :age, :course, :city, :marks, :grade ]
       permitted << :user_id if current_user.admin?
       params.require(:student).permit(*permitted)
     end

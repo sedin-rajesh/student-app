@@ -36,17 +36,25 @@ class StudentsController < ApplicationController
     end
     if @student.save
       NotificationMailer.student_created(@student).deliver_later
-      flash.now[:notice] = "Student created successfully."
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to students_path, notice: "Student created successfully." }
+      if params[:from_modal] == "true"
+        flash.now[:notice] = "Student created successfully."
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to students_path, notice: "Student created successfully.", status: :see_other }
+        end
+      else
+        redirect_to students_path, notice: "Student created successfully.", status: :see_other
       end
     else
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
+      if params[:from_modal] == "true"
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace("student_form", template: "students/new"), status: :unprocessable_entity
         end
         format.html { render :new, status: :unprocessable_entity }
+      end
+      else
+        render :new, status: :unprocessable_entity
       end
     end
   end
@@ -96,7 +104,7 @@ class StudentsController < ApplicationController
   def remove_profile_photo
     if @student.profile_photo.attached?
       @student.profile_photo.purge
-      redirect_to @student, notice: "Profile photo removed successfully"
+      redirect_to students_path, notice: "Profile photo removed successfully"
     else
       redirect_to @student, alert: "No profile photo to remove"
     end
@@ -113,10 +121,6 @@ class StudentsController < ApplicationController
   end
 
   def generate_report_card
-    unless current_user.admin?
-      redirect_to students_path, alert: "You are not authorized to generate this report card."
-      return
-    end
     GenerateReportCardJob.perform_later(@student.id)
     redirect_to @student, notice: "Report card generation has been queued. You will receive an email once it's ready."
   end
@@ -131,8 +135,11 @@ class StudentsController < ApplicationController
     end
 
     def student_params
-      permitted = [ :name, :email, :age, :course, :city, :marks, :profile_photo, documents: [] ]
-      permitted << :user_id if current_user.admin?
-      params.expect(student: permitted)
+      permitted = params.expect( student: [ :name, :email, :age, :course, :city, :marks, :grade, :profile_photo, { documents: [] }, *(current_user.admin? ? [ :user_id ] : []) ])
+      if permitted[:documents].present?
+        permitted[:documents].reject!(&:blank?)
+        permitted.delete(:documents) if permitted[:documents].empty?
+      end
+      permitted
     end
 end

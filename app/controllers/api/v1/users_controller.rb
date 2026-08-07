@@ -43,6 +43,11 @@ class Api::V1::UsersController < Api::V1::BaseController
     render json: teachers
   end
 
+  def teachers
+    teachers = User.teacher
+    render json: teachers
+  end
+
   private
 
   def set_user
@@ -54,7 +59,8 @@ class Api::V1::UsersController < Api::V1::BaseController
       :email,
       :password,
       :password_confirmation,
-      :role
+      :role,
+      :subject
     )
   end
 
